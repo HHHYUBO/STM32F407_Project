@@ -12,7 +12,7 @@
 #define MODEL_INPUT_HEIGHT 30
 #define MODEL_INPUT_WIDTH 39
 #define MODEL_INPUT_CHANNELS 1
-#define MODEL_NUM_CLASSES 2
+#define MODEL_NUM_CLASSES 3
 
 #define MODEL_FLATTENED_SIZE 1170
 
@@ -32,7 +32,7 @@
 
 // 全连接层 dense_2
 #define FC2_INPUT_SIZE 16
-#define FC2_OUTPUT_SIZE 2
+#define FC2_OUTPUT_SIZE 3
 
 // 标签映射
 extern const char* LABELS[];

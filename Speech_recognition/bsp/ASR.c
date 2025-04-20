@@ -36,6 +36,9 @@ uint8_t is_speech[NUM_FRAMES] = {0};
 // 合并特征用的缓冲区
 float32_t combined_features[NUM_FRAMES][39];  // 13 MFCC + 13 Delta + 13 Delta-Delta
 
+// 定义模式 Train:获取训练集模式 Recognize:识别模式
+uint8_t ASR_Mode = Recognize;
+
 /******************************************************************************
  * Initialization Functions
  ******************************************************************************/
@@ -50,6 +53,9 @@ void ASR_Init(void)
     
     // 初始化FFT实例
     arm_rfft_fast_init_f32(&fft_instance, NFFT);
+		
+		// 初始化CNN
+		ASR_CNN_Init();
     
     printf("ASR module initialized\r\n");
 }
@@ -377,7 +383,7 @@ void ASR_ExtractFeaturesOnly(uint16_t* adc_data, uint16_t data_len)
 // 全局特征缓冲区，用于存储提取的特征
 static float32_t features[MODEL_INPUT_HEIGHT][MODEL_INPUT_WIDTH];
 
-// 完整的语音识别流程函数 - 合并了特征提取和识别过程
+// 完整的识别流程函数 - 合并了特征提取和识别过程
 uint8_t ASR_RecognizeSpeech(uint16_t* adc_data, uint16_t data_len, uint8_t* result, float32_t* confidence)
 {
     printf("Starting speech recognition process...\r\n");
@@ -421,15 +427,53 @@ void ASR_HandleRecognitionResult(uint8_t result, float32_t confidence)
     
     // 根据识别结果执行相应操作
     if (strcmp(label, "add") == 0) {
-        printf("Executing addition operation\r\n");
+        printf("add\r\n");
 				LED1_Turn();
     } else if (strcmp(label, "sub") == 0) {
-        printf("Executing subtraction operation\r\n");
+        printf("sub\r\n");
 				LED2_Turn();
-    }
+    }else if (strcmp(label, "none") == 0) {
+        printf("none\r\n");
+		}
+		
     // 可以根据需要添加更多的命令处理
 }
 
+// 外部调用的包含ADC采集、预处理与识别的完整函数
+void Recognition(void)
+{
+		if(GetKeyNum()==2)
+		{				
+			// 启动ADC采集
+			ADC_Start();
+			
+			// 等待ADC采集完成
+			while(!adc_conversion_complete)
+			{
+				delay_ms(10);
+			}  
+				
+			if(ASR_Mode == Recognize)
+			{
+				// 执行语音识别
+				uint8_t result;
+				float32_t confidence;
+				// 使用封装好的语音识别函数
+				uint8_t success = ASR_RecognizeSpeech(adc_buffer, ADC_BUFFER_SIZE, &result, &confidence);
+				// 处理识别结果
+				ASR_HandleRecognitionResult(result, confidence);
+			}
+			else if(ASR_Mode == Train)
+			{
+				ASR_ExtractFeaturesOnly(adc_buffer,ADC_BUFFER_SIZE);
+				// 发送采集结果
+				ASR_SendCNNTrainingData();
+			}
+			
+			// 重置ADC完成标志
+			adc_conversion_complete = 0;
+		}
+}
 
 /******************************************************************************
  * Data Transmission Functions

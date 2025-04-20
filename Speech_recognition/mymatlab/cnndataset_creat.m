@@ -9,7 +9,7 @@ serialPort = 'COM12';  % 根据实际情况修改COM口
 baudRate = 115200;
 
 % 创建保存目录
-saveDir = 'speech_features';
+saveDir = 'speech_features0420';
 if ~exist(saveDir, 'dir')
     mkdir(saveDir);
 end
@@ -209,7 +209,8 @@ while running
             % 询问是否播放刚采集的语音
             set(statusText, 'String', '请在命令窗口选择是否播放刚采集的语音');
             drawnow;
-            playResponse = input('是否播放刚采集的语音？(y/n): ', 's');
+            % playResponse = input('是否播放刚采集的语音？(y/n): ', 's');
+            playResponse = 'y';
             if strcmpi(playResponse, 'y')
                 % 播放音频
                 sound(waveform_values, sampleRate);

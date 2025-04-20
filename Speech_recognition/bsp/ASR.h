@@ -14,6 +14,9 @@
 #define NUM_FILTERS 26    // 梅尔滤波器数量
 #define FEATURE_DIM 39    // 特征维度 (13 MFCC + 13 Delta + 13 Delta-Delta)
 
+#define Train 1
+#define Recognize 0
+
 // 预处理后的数据缓冲区
 extern float32_t processed_buffer[];
 extern float32_t frame_buffer[];
@@ -31,6 +34,9 @@ extern float32_t combined_features[][FEATURE_DIM];
 extern uint16_t speech_start;
 extern uint16_t speech_end;
 extern uint8_t is_speech[];
+
+// 定义模式
+extern uint8_t ASR_Mode;
 
 /******************************************************************************
  * Initialization Functions
@@ -68,8 +74,9 @@ void ASR_ExtractFeaturesOnly(uint16_t* adc_data, uint16_t data_len);
 uint8_t ASR_RecognizeSpeech(uint16_t* adc_data, uint16_t data_len, uint8_t* result, float32_t* confidence);
 // 处理识别结果的函数
 void ASR_HandleRecognitionResult(uint8_t result, float32_t confidence);
-
-
+// 外部调用的包含ADC采集、预处理与识别的完整函数
+void Recognition(void);
+	
 /******************************************************************************
  * Data Transmission Functions
  ******************************************************************************/

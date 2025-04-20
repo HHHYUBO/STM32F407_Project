@@ -159,9 +159,7 @@ uint8_t ASR_CNN_Recognize(float32_t features[MODEL_INPUT_HEIGHT][MODEL_INPUT_WID
 }
 
 // 初始化CNN模型
-void ASR_CNN_Init(void) {
-    printf("CNN model initialized\r\n");
-    
+void ASR_CNN_Init(void) {   
     // 初始化中间缓冲区
     memset(flattened_input, 0, sizeof(flattened_input));
     memset(fc0_output, 0, sizeof(fc0_output));
