@@ -1,0 +1,10 @@
+.\objects\speech_model.o: ..\..\bsp\speech_model.c
+.\objects\speech_model.o: ..\..\bsp\speech_model.h
+.\objects\speech_model.o: ..\..\libraries\CMSIS\Include\arm_math.h
+.\objects\speech_model.o: ..\..\libraries\CMSIS\Include\core_cm4.h
+.\objects\speech_model.o: D:\app\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\speech_model.o: ..\..\libraries\CMSIS\Include\core_cmInstr.h
+.\objects\speech_model.o: ..\..\libraries\CMSIS\Include\core_cmFunc.h
+.\objects\speech_model.o: ..\..\libraries\CMSIS\Include\core_cmSimd.h
+.\objects\speech_model.o: D:\app\keil5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\speech_model.o: D:\app\keil5\ARM\ARMCC\Bin\..\include\math.h
